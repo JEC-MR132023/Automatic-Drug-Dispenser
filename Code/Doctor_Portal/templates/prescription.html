@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescription Details</title>
+    <!-- Bootstrap CSS for styling -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .medication-group {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Prescription Details</h1>
+        
+        <form id="prescriptionForm" method="post">
+
+            <!-- Patient Information -->
+            <div class="form-group">
+                <label for="patientName">Patient Name:</label>
+                <input type="text" class="form-control" name="patientName" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="patientId">Patient ID:</label>
+                    <input type="text" class="form-control" name="patientId" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="age">Age:</label>
+                    <input type="number" class="form-control" name="age" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="gender">Gender:</label>
+                    <select class="form-control" name="gender" required>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="weight">Weight (kg):</label>
+                <input type="number" class="form-control" name="weight" required>
+            </div>
+
+            <!-- Medication Details -->
+            <div id="medicationDetails">
+                <div class="medication-group">
+                    <label for="medicine">Medicine:</label>
+                    <input type="text" class="form-control" name="medicine[]" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="dosage">Dosage:</label>
+                        <input type="text" class="form-control" name="dosage[]" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="frequency">Frequency:</label>
+                        <input type="text" class="form-control" name="frequency[]" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="duration">Duration:</label>
+                        <input type="text" class="form-control" name="duration[]" required>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-primary" onclick="addMedication()">Add More Medicines</button>
+
+            <button type="submit" class="btn btn-success mt-3" name="submit_prescription">Submit Prescription</button>
+
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js for responsive features -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        // JavaScript function to dynamically add more medication details
+        function addMedication() {
+            var medicationGroup = document.createElement('div');
+            medicationGroup.className = 'medication-group';
+            medicationGroup.innerHTML = `
+                <label for="medicine">Medicine:</label>
+                <input type="text" class="form-control" name="medicine[]" required>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="dosage">Dosage:</label>
+                        <input type="text" class="form-control" name="dosage[]" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="frequency">Frequency:</label>
+                        <input type="text" class="form-control" name="frequency[]" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="duration">Duration:</label>
+                        <input type="text" class="form-control" name="duration[]" required>
+                    </div>
+                </div>
+            `;
+            document.getElementById('medicationDetails').appendChild(medicationGroup);
+        }
+    </script>
+</body>
+</html>
