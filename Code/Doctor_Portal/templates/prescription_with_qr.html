@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prescription with QR Code</title>
+    <!-- Bootstrap CSS for styling -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Prescription Details</h1>
+
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Display prescription details -->
+                <h4>Prescription Details:</h4>
+                <pre>{{ prescription_details }}</pre>
+            </div>
+            <div class="col-md-6">
+                <!-- Display QR code -->
+                <h4>Prescription QR Code:</h4>
+                <img src="{{ img_base64 }}" alt="Prescription QR Code" class="img-fluid">
+            </div>
+        </div>
+
+        <p><a href="{{ url_for('logout') }}">Logout</a></p>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js for responsive features -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
