@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Dispenser</title>
+    <!-- Include the Razorpay script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    
+    <style>
+        body {
+            background-color: #001f3f; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh; 
+            margin: 0;
+            color: #ffffff; 
+        }
+
+        h1 {
+            text-transform: capitalize; 
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 20px;
+            background-color: #0074cc; 
+            color: #ffffff; 
+            cursor: pointer;
+        }
+
+        #amountInput {
+            width: 200px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Medical Dispenser</h1>
+    <p>Pay Now Bitch</p>
+
+
+    <label for="amountInput">Enter Amount:</label>
+    <input type="text" id="amountInput" class="form-control my-2" placeholder="Enter amount here"/>
+
+    <button onclick="startRazorpayPayment()">Pay with Razorpay</button>
+
+    <script>
+        function startRazorpayPayment() {
+            var amount = document.getElementById('amountInput').value;
+            
+            if (!amount || isNaN(amount) || amount <= 0) {
+                alert('Please enter a valid amount.');
+                return;
+            }
+
+            var razorpay = new Razorpay({
+                key: 'Enter Api key',
+                amount: amount * 100,
+                currency: 'INR',
+                name: 'Medical Dispenser',
+                description: 'Product or Service Description',
+                handler: function(response) {
+                    alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
+                }
+            });
+            razorpay.open();
+        }
+    </script>
+
+</body>
+</html>
