@@ -3,12 +3,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 void main() {
-  runApp(const MedsApp());
+  runApp(MedsApp());
 }
 
 class MedsApp extends StatelessWidget {
-  const MedsApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,14 +15,12 @@ class MedsApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const MedsListScreen(),
+      home: MedsListScreen(),
     );
   }
 }
 
 class MedsListScreen extends StatefulWidget {
-  const MedsListScreen({super.key});
-
   @override
   _MedsListScreenState createState() => _MedsListScreenState();
 }
@@ -53,21 +49,21 @@ class _MedsListScreenState extends State<MedsListScreen> {
     }
   }
 
-  Future<void> addMed(Map<String, dynamic> data) async {
+  Future<void> updateMed(int id, Map<String, dynamic> data) async {
     try {
-      final response = await http.post(
-        Uri.parse('http://192.168.18.138:5000/meds'),
+      final response = await http.put(
+        Uri.parse('http://192.168.18.138:5000/meds/$id'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(data),
       );
-      if (response.statusCode == 201) {
-        print('Medicine added successfully');
-        fetchMeds(); // Refresh medicine data after adding
+      if (response.statusCode == 200) {
+        print('Medicine updated successfully');
+        fetchMeds(); // Refresh medicine data after update
       } else {
-        print('Failed to add medicine');
+        print('Failed to update medicine');
       }
     } catch (error) {
-      print('Error adding medicine: $error');
+      print('Error updating medicine: $error');
     }
   }
 
@@ -75,60 +71,54 @@ class _MedsListScreenState extends State<MedsListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Meds List'),
+        title: Text('Meds List'),
       ),
       body: ListView.builder(
         itemCount: meds.length,
         itemBuilder: (context, index) {
           final med = meds[index];
           return ListTile(
-            title: Text('${med['id']}.  ${med['name']} ${med['dosage']}mg  - ₹${med['price']}'),
+            title: Text('ID: ${med['id']} - ${med['name']} ${med['dosage']}mg - ₹${med['price']}'),
 
             onTap: () {
               _editMed(context, med);
             },
           );
-
-
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _addMed(context);
+          // Implement adding new medicine functionality
         },
-        child: const Icon(Icons.add),
+        child: Icon(Icons.add),
       ),
     );
   }
 
   void _editMed(BuildContext context, Map<String, dynamic> med) {
-    // Implement edit medicine functionality
-  }
-
-  void _addMed(BuildContext context) {
-    TextEditingController nameController = TextEditingController();
-    TextEditingController dosageController = TextEditingController();
-    TextEditingController priceController = TextEditingController();
+    TextEditingController nameController = TextEditingController(text: med['name']);
+    TextEditingController dosageController = TextEditingController(text: med['dosage']);
+    TextEditingController priceController = TextEditingController(text: med['price'].toString());
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Add Medicine'),
+          title: Text('Edit Medicine'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               TextField(
                 controller: nameController,
-                decoration: const InputDecoration(labelText: 'Name'),
+                decoration: InputDecoration(labelText: 'Name'),
               ),
               TextField(
                 controller: dosageController,
-                decoration: const InputDecoration(labelText: 'Dosage'),
+                decoration: InputDecoration(labelText: 'Dosage'),
               ),
               TextField(
                 controller: priceController,
-                decoration: const InputDecoration(labelText: 'Price'),
+                decoration: InputDecoration(labelText: 'Price'),
                 keyboardType: TextInputType.number,
               ),
             ],
@@ -138,19 +128,19 @@ class _MedsListScreenState extends State<MedsListScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancel'),
+              child: Text('Cancel'),
             ),
             ElevatedButton(
               onPressed: () {
-                Map<String, dynamic> newMed = {
+                Map<String, dynamic> updatedMed = {
                   'name': nameController.text,
                   'dosage': dosageController.text,
                   'price': double.parse(priceController.text),
                 };
-                addMed(newMed);
+                updateMed(med['id'], updatedMed);
                 Navigator.of(context).pop();
               },
-              child: const Text('Save'),
+              child: Text('Save'),
             ),
           ],
         );
