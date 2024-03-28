@@ -58,6 +58,7 @@ class _MedsListScreenState extends State<MedsListScreen> {
       );
       if (response.statusCode == 200) {
         print('Medicine updated successfully');
+        fetchMeds(); // Refresh medicine data after update
       } else {
         print('Failed to update medicine');
       }
@@ -141,4 +142,3 @@ class _MedsListScreenState extends State<MedsListScreen> {
     );
   }
 }
-
