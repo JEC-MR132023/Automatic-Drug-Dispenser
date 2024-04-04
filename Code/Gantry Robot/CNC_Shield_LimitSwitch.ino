@@ -1,5 +1,9 @@
+ //This is a test code for limit switch through the CNC shield
+//The limit switch must be connected on the two terminals - NO and C
+
 // Define the pin where the limit switch is connected on the CNC shield
-#define LIMIT_SWITCH_PIN_X_MIN 9 // Example pin mapping for X-axis minimum limit switch
+#define LIMIT_SWITCH_PIN_X_MIN 9 
+// 9 is the pin connected on X+/X- pin on the CNC Shield
 
 void setup() {
   // Initialize serial communication
