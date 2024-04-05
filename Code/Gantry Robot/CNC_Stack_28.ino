@@ -1,3 +1,6 @@
+//This code has the limit switch working, the mimit switch function is now inside the movetoCoordinate function
+//When the coordinate is sent and the robot is moving to the position, triggerring the limit switch stops the motor and when a new coordinate is given it resumes its operation and continues its movement to the old coordinate
+
 #include <AccelStepper.h>
 
 // Define stepper motor connections and steps per revolution
@@ -45,11 +48,27 @@ void moveEndEffectorToCoordinate(Coordinate coord) {
 
   // Run both Y-axis motors until they reach the target position
   while (stepperX.distanceToGo() != 0 || stepperY1.distanceToGo() != 0 || stepperY2.distanceToGo() != 0) {
+    // Check X-axis limit switch
+    if (isXLimitReached()) {
+      Serial.println("X End Stop is triggered");
+      stepperX.stop(); // Stop X-axis stepper motor if limit switch is triggered
+      break; // Exit the loop immediately
+    }
+
+    // Check Y-axis limit switch
+  //  if (isYLimitReached()) {
+  //    Serial.println("Y End Stop is triggered");
+  //    stepperY1.stop(); // Stop Y-axis stepper motor 1 if limit switch is triggered
+  //    stepperY2.stop(); // Stop Y-axis stepper motor 2 if limit switch is triggered
+  //    break; // Exit the loop immediately
+  //  }
+
     stepperX.run();
     stepperY1.run();
     stepperY2.run();
   }
 }
+
 
 // Function to check X-axis limit switch
 bool isXLimitReached() {
@@ -112,16 +131,14 @@ void setup() {
 }
 
 void loop() {
-  // Check X-axis limit switch
-  if (isXLimitReached()) {
-    stepperX.stop(); // Stop X-axis stepper motor if limit switch is triggered
-  }
+ 
 
   // Check Y-axis limit switch
-  if (isYLimitReached()) {
-    stepperY1.stop(); // Stop Y-axis stepper motor 1 if limit switch is triggered
-    stepperY2.stop(); // Stop Y-axis stepper motor 2 if limit switch is triggered
-  }
+  //if (isYLimitReached()) {
+  //  Serial.println("Y End Stop is triggered");
+  //  stepperY1.stop(); // Stop Y-axis stepper motor 1 if limit switch is triggered
+  //  stepperY2.stop(); // Stop Y-axis stepper motor 2 if limit switch is triggered
+  //}
 
   // If data is available to read from Serial
   if (Serial.available() > 0) {
@@ -147,7 +164,7 @@ void loop() {
         // Move end effector to the specified coordinate
         moveEndEffectorToCoordinate(targetCoord);
       } else {
-        Serial.println("Invalid stack number. Please enter a number between 1 and 28.");
+        Serial.println("Invalid stack number. Please enter a number between 1 and 24.");
       }
     } else if (inputChar >= 'a' && inputChar <= 'g') {
       // Convert character input to corresponding stack number
